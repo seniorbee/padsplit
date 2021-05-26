@@ -19,10 +19,12 @@ class MoveOutGetSerializer(serializers.HyperlinkedModelSerializer):
     location = serializers.SerializerMethodField()
     uid = serializers.SerializerMethodField()
     balance = serializers.SerializerMethodField()
+    room = serializers.UUIDField()
+    last_occupant = serializers.UUIDField()
 
     class Meta:
         model = MoveOut
-        fields = ('move_out_date', 'id', 'address', 'room', 'location', 'last_occupant', 'uid', 'balance')
+        fields = ('id', 'move_out_date', 'address', 'room', 'location', 'last_occupant', 'uid', 'balance')
 
     def get_location(self, obj: MoveOut):
         return obj.room.address.location
