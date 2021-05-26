@@ -1,10 +1,7 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-USER_MODEL = get_user_model()
 
 
 class BaseModel(models.Model):
