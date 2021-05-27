@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from utils.BaseModels import BaseModel
+from utils.BaseClasses import BaseModel
 
 USER_MODEL = get_user_model()
 

@@ -3,34 +3,34 @@ import random
 from rest_framework import serializers
 
 from places.models import MoveOut, Address
+from users.api.serializers import UserGetSerializer
 
 
 class AddressGetSerializer(serializers.ModelSerializer):
-    """Serializer for showing address data in Move-out list"""
+    """Serializer for showing address data """
 
     class Meta:
         model = Address
         fields = ('id', 'title', 'location')
 
 
-class MoveOutGetSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for getting move out data"""
-    address = AddressGetSerializer(source='room.address')
-    location = serializers.SerializerMethodField()
-    uid = serializers.SerializerMethodField()
-    balance = serializers.SerializerMethodField()
-    room = serializers.UUIDField()
-    last_occupant = serializers.UUIDField()
+class MoveOutCreateSerializer(serializers.ModelSerializer):
+    """Serializer for creating an address object"""
 
     class Meta:
         model = MoveOut
-        fields = ('id', 'move_out_date', 'address', 'room', 'location', 'last_occupant', 'uid', 'balance')
+        fields = ('move_out_date', 'room', 'last_occupant')
 
-    def get_location(self, obj: MoveOut):
-        return obj.room.address.location
 
-    def get_uid(self, obj: MoveOut):
-        return obj.last_occupant_id
+class MoveOutGetSerializer(serializers.ModelSerializer):
+    """Serializer for getting move out data"""
+    address = AddressGetSerializer(source='room.address')
+    uid = serializers.ReadOnlyField(source='last_occupant_id')
+    balance = serializers.ReadOnlyField(default='$ 405.90')
+    room = serializers.UUIDField()
+    last_occupant = UserGetSerializer()
 
-    def get_balance(self, obj: MoveOut):
-        return random.randint(0, 500)
+    class Meta:
+        model = MoveOut
+        fields = ('id', 'move_out_date', 'address',
+                  'room', 'last_occupant', 'uid', 'balance')

@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import viewsets
 
 
 class BaseModel(models.Model):
@@ -12,3 +13,14 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class MultiSerializerViewSet(viewsets.GenericViewSet):
+    """Base class for returning different serializers based on action"""
+    serializers: dict
+
+    def get_serializer_class(self):
+        try:
+            return self.serializers[self.action]
+        except KeyError:
+            return super(MultiSerializerViewSet, self).get_serializer_class()
