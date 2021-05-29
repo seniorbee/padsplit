@@ -1,16 +1,19 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_headers
+from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
 from places.api.serializers import MoveOutGetSerializer
 from places.models import MoveOut
-from utils.BaseClasses import MultiSerializerViewSet
 
 
-class MoveOutViewSet(MultiSerializerViewSet, ModelViewSet):
+class MoveOutViewSet(ModelViewSet):
     serializer_class = MoveOutGetSerializer
-    serializers = {}
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # action_permissions = {
+    #     'destroy': [permissions.IsAdminUser]
+    # }
 
     def get_queryset(self):
         return MoveOut.objects.select_related('room', 'last_occupant', 'room__address')

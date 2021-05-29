@@ -1,12 +1,10 @@
-from django.contrib.auth import login
-from django.contrib.auth.hashers import check_password
 from django.db import IntegrityError
 from django.test import TestCase
 
 from users.models import User
 
 
-# Create your tests here.
+# Create your testing here.
 class UserTestCase(TestCase):
     def setUp(self):
         self.user_data = {'email': 'gubatovalihaydar@gmail.com', 'password': 'AnewPas923'}

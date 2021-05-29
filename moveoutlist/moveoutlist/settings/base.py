@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'places.apps.PlacesConfig',
     'users.apps.UsersConfig',
+    'utils.apps.UtilsConfig'
 ]
 
 MIDDLEWARE = [
@@ -131,4 +132,7 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
