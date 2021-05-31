@@ -1,9 +1,21 @@
-FROM python:3.9-slim-buster
+# pull official base image
+FROM python:3.8.3-alpine
 
+# set work directory
+WORKDIR /app
+
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /project
-ADD . .
+# dependencies for Pillow
+RUN apk add --update --no-cache --virtual .tmp gcc libc-dev linux-headers
+RUN apk add --no-cache jpeg-dev zlib-dev
+
+# copy project
+COPY moveoutlist/ .
+
+# install dependencies
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-CMD python manage.py runserver 0.0.0.0:8080
+RUN apk del .tmp

@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: python manage.py runserver 0.0.0.0:8000 --settings moveoutlist.settings.prod
+    #    command: gunicorn moveoutlist.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - ./moveoutlist:/app/
+      - static_volume:/app/static/
+      - media_volume:/app/media/
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    depends_on:
+      - db
+    networks:
+      - db-network
+      - nginx-network
+      - redis-network
+  redis:
+    image: redis:alpine
+    networks:
+      - redis-network
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod
+    networks:
+      - db-network
+  nginx:
+    build: ./nginx
+    ports:
+      - 8000:80
+    volumes:
+      - static_volume:/app/static/
+      - media_volume:/app/media/
+    depends_on:
+      - web
+    networks:
+      - nginx-network
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+networks:
+  nginx-network:
+    driver: bridge
+  db-network:
+    driver: bridge
+  redis-network:
+    driver: bridge
