@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    command: python manage.py runserver 0.0.0.0:8000 --settings moveoutlist.settings.prod
-    #    command: gunicorn moveoutlist.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn moveoutlist.wsgi:application --bind 0.0.0.0:8000
+    #    command: python manage.py runserver 0.0.0.0:8000 --settings moveoutlist.settings.prod
     volumes:
       - ./moveoutlist:/app/
       - static_volume:/app/static/

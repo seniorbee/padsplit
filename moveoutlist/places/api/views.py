@@ -11,9 +11,6 @@ from places.models import MoveOut
 class MoveOutViewSet(ModelViewSet):
     serializer_class = MoveOutGetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # action_permissions = {
-    #     'destroy': [permissions.IsAdminUser]
-    # }
 
     def get_queryset(self):
         return MoveOut.objects.select_related('room', 'last_occupant', 'room__address')
