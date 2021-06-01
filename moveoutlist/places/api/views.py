@@ -4,13 +4,17 @@ from django.views.decorators.vary import vary_on_headers
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
-from places.api.serializers import MoveOutGetSerializer
+from places.api.serializers import MoveOutGetSerializer, MoveOutCreateSerializer
 from places.models import MoveOut
 
 
 class MoveOutViewSet(ModelViewSet):
-    serializer_class = MoveOutGetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'update']:
+            return MoveOutCreateSerializer
+        return MoveOutGetSerializer
 
     def get_queryset(self):
         return MoveOut.objects.select_related('room', 'last_occupant', 'room__address')
